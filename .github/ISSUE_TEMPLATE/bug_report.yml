@@ -25,7 +25,7 @@ body:
         - label: If using Google Maps API, I checked that my API keys are activated and the MAP TILES API also is enabled.
           required: false
         - label: My wifi adapter has monitor mode capabilities.
-          requireD: true
+          required: true
 
   - type: textarea
     id: description
