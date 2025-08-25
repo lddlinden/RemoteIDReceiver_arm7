@@ -1,0 +1,37 @@
+services:
+  dev-frontend:
+    image: lddlinden/frontend:armv7
+    ports:
+      - "3000:3000"   # Vue dev server port
+    environment:
+      - NODE_ENV=development
+      - VITE_MAP_STYLE=${FRONTEND_MAP_STYLE:-}
+      - VITE_MAP_STYLE_URL=${FRONTEND_MAP_SOURCE:-}
+      - VITE_GOOGLE_API_KEY=${FRONTEND_MAP_API_KEY:-}
+    command: npm run dev
+    volumes:
+      - ./frontend/:/app
+      - /app/node_modules
+
+  build-frontend:
+    image: lddlinden/frontend:armv7
+    environment:
+      - NODE_ENV=production
+      - VITE_MAP_STYLE=${FRONTEND_MAP_STYLE:-}
+      - VITE_MAP_STYLE_URL=${FRONTEND_MAP_SOURCE:-}
+      - VITE_GOOGLE_API_KEY=${FRONTEND_MAP_API_KEY:-}
+    command: npm run build
+    volumes:
+      - ./frontend/:/app
+      - /app/node_modules
+
+  backend:
+    image: lddlinden/backend:armv7
+    environment:
+      - PYTHONPATH=/app
+    command: python backend/dronesniffer/main.py -p 8080
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+    network_mode: "host"
+    restart: unless-stopped

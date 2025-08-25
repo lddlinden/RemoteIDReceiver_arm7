@@ -1,6 +1,10 @@
-FROM python:3.13-bookworm
+FROM arm32v7/python:3.13-bookworm
 
 WORKDIR /app
+
+RUN apt-get update && apt-get install -y \
+    build-essential gfortran libatlas-base-dev libopenblas-dev python3-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 # Copy backend requirements and install Python packages
 COPY requirements.txt .
